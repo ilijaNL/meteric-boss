@@ -12,7 +12,7 @@ import pgp from 'pg-promise';
 
 export const pool = new Pool({
   connectionString: process.env.PG_CONNECTION!,
-  application_name: process.env.APP_NAME,
+  application_name: (process.env.APP_NAME ?? '') + '_pool',
   max: 30,
   min: 10,
 });

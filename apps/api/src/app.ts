@@ -3,11 +3,12 @@ require('dotenv-safe').config({
 });
 
 import { FastifyPluginAsync, FastifyServerOptions, RouteOptions } from 'fastify';
+import { migrate } from 'postgres-migrations';
 import fp from 'fastify-plugin';
 import fastifyHelmet from '@fastify/helmet';
 import _ from 'lodash';
 import sensible from '@fastify/sensible';
-import db from './db';
+import db, { pool } from './db';
 import { ingestPlugin } from './services/ingest/api';
 import { estimatorPlugin } from './services/estimator/api';
 import { limiterPlugin } from './services/limiter/api';
@@ -19,6 +20,11 @@ const ENVIRONMENT = process.env.NODE_ENV ?? 'development';
 const IS_PROD = ENVIRONMENT === 'production';
 
 const app: FastifyPluginAsync = async (fastify) => {
+  // run migrations
+  if (process.env.SKIP_MIGRATIONS !== '1') {
+    await migrate({ client: pool }, './migrations', { logger: fastify.log.warn.bind(fastify.log) });
+  }
+
   if (IS_PROD) {
     await fastify.register(fastifyHelmet);
   }

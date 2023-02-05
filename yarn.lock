@@ -2194,7 +2194,7 @@ pg@8.8.0:
     pg-types "^2.1.0"
     pgpass "1.x"
 
-pg@^8.5.1, pg@^8.8.0:
+pg@^8.5.1, pg@^8.6.0, pg@^8.8.0:
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/pg/-/pg-8.9.0.tgz#73c5d77a854d36b0e185450dacb8b90c669e040b"
   integrity sha512-ZJM+qkEbtOHRuXjmvBtOgNOXOtLSbxiMiUVMgE4rV6Zwocy03RicCVvDXgx8l4Biwo8/qORUnEqn2fdQzV7KCg==
@@ -2302,6 +2302,14 @@ postgres-interval@^1.1.0:
   integrity sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==
   dependencies:
     xtend "^4.0.0"
+
+postgres-migrations@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/postgres-migrations/-/postgres-migrations-5.3.0.tgz#3a8a98f25994e95f0a79de7f315d086fcfc51b94"
+  integrity sha512-gnTHWJZVWbW8T3mXIxJm1JRU853TqBVWkhgfsTJr7zqT3VexjRmJj9kNi96rVhfTezDU4FVW6pf701kLOZiKIA==
+  dependencies:
+    pg "^8.6.0"
+    sql-template-strings "^2.2.2"
 
 prettier@^2.4.1, prettier@^2.7.1:
   version "2.8.3"
@@ -2734,6 +2742,11 @@ split2@^4.0.0, split2@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/split2/-/split2-4.1.0.tgz#101907a24370f85bb782f08adaabe4e281ecf809"
   integrity sha512-VBiJxFkxiXRlUIeyMQi8s4hgvKCSjtknJv/LVYbrgALPwf5zSKmEwV9Lst25AkvMDnvxODugjdl6KZgwKM1WYQ==
+
+sql-template-strings@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/sql-template-strings/-/sql-template-strings-2.2.2.tgz#3f11508a25addfce217a3042a9d300c3193b96ff"
+  integrity sha512-UXhXR2869FQaD+GMly8jAMCRZ94nU5KcrFetZfWEMd+LVVG6y0ExgHAhatEcKZ/wk8YcKPdi+hiD2wm75lq3/Q==
 
 statuses@2.0.1:
   version "2.0.1"

@@ -6,7 +6,7 @@ const inProcessBus = new Nanobus<InProcessEvents>();
 
 export const pgboss = new PgBoss({
   connectionString: process.env.PG_CONNECTION!,
-  application_name: process.env.APP_NAME,
+  application_name: process.env.APP_NAME + '_pgboss',
   noScheduling: true,
   onComplete: false,
   max: 5,
