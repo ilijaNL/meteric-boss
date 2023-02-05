@@ -1,11 +1,13 @@
-import { ColumnType,  RawBuilder } from 'kysely';
-import { IPostgresInterval } from 'postgres-interval';
+import type { ColumnType } from "kysely";
+import type { IPostgresInterval } from "postgres-interval";
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
 export type Interval = ColumnType<IPostgresInterval, IPostgresInterval | number, IPostgresInterval | number>;
+
+export type JobState = "active" | "cancelled" | "completed" | "created" | "expired" | "failed" | "retry";
 
 export type Json = ColumnType<JsonValue, string, string>;
 
@@ -19,7 +21,7 @@ export type JsonPrimitive = boolean | null | number | string;
 
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
-export type Timestamp = ColumnType<Date | RawBuilder, Date | string | RawBuilder, Date | string | RawBuilder>;
+export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface UsageArchive {
   archivedon: Generated<Timestamp>;
@@ -41,7 +43,7 @@ export interface UsageArchive {
   singletonon: Timestamp | null;
   startafter: Timestamp;
   startedon: Timestamp | null;
-  state: string;
+  state: JobState;
 }
 
 export interface UsageEventStream {
@@ -73,7 +75,7 @@ export interface UsageJob {
   singletonon: Timestamp | null;
   startafter: Generated<Timestamp>;
   startedon: Timestamp | null;
-  state: Generated<string>;
+  state: Generated<JobState>;
 }
 
 export interface UsageOperations {
@@ -115,6 +117,7 @@ export interface UsageSubscription {
 export interface UsageTargets {
   created_at: Generated<Timestamp>;
   id: Generated<string>;
+  label: string;
   meta_data: Json;
 }
 

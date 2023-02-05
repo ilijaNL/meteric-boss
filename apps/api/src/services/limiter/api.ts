@@ -4,12 +4,9 @@ import { Static, Type } from '@sinclair/typebox';
 import { getPeriodEstimation } from '../estimator/api';
 import createHttpError from 'http-errors';
 import inProcessBus from '@/event-bus';
-import db from '@/db';
-import fastJson from 'fast-json-stable-stringify';
-import { sql } from 'kysely';
 import LRUCache from 'lru-cache';
 import crypto from 'crypto';
-import { integrationEvents } from '@/events';
+import { integrationEvents, toEventsBuilder } from '@/events';
 import { registerTaskQueues } from './tasks';
 
 const RateLimitCheckResponseSchema = Type.Object({
@@ -73,17 +70,7 @@ async function dispatchQuotaReachedEvent(target_id: string, context: PeriodEstim
   }
   const event = integrationEvents.quota_reached({ target_id });
 
-  const promise = db
-    .insertInto('usage.event_stream')
-    .values({
-      event_name: event.event_name,
-      event_data: fastJson(event.data),
-      idempotence_key: key,
-      ttl: context.endDate,
-      created_at: sql`now()`,
-    })
-    .onConflict((c) => c.doNothing())
-    .execute();
+  const promise = toEventsBuilder(event).execute();
 
   dispatchCache.set(key, promise);
 
@@ -98,18 +85,7 @@ async function dispatchQuotaAlmostReachedEvent(target_id: string, context: Perio
   }
 
   const event = integrationEvents.quota_almost_reached({ target_id });
-
-  const promise = db
-    .insertInto('usage.event_stream')
-    .values({
-      event_name: event.event_name,
-      event_data: fastJson(event.data),
-      idempotence_key: key,
-      ttl: context.endDate,
-      created_at: sql`now()`,
-    })
-    .onConflict((c) => c.doNothing())
-    .execute();
+  const promise = toEventsBuilder(event).execute();
 
   dispatchCache.set(key, promise);
 

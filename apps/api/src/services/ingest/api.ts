@@ -33,7 +33,7 @@ const ingestBatcher = createBatcher<Static<typeof OperationReportSchema>>(
           meta_data: fastJson(d.m_d),
           operation: d.op,
           target_id: d.t_id,
-          ts: sql`now() - (interval '1 milliseconds' * ${d.delta_ms})`,
+          ts: sql<string>`now() - (interval '1 milliseconds' * ${d.delta_ms})`,
           status_code: d.s ?? 200,
           weight: d.w,
           duration: d.d,

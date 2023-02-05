@@ -17,5 +17,101 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "143ccdb3-bb83-4f6b-9cc7-97f03d3231a5",
+    "colId": "cc958731-c089-4ed7-9e37-b6a5ad21f5ac",
+    "containerId": "",
+    "name": "create-target",
+    "url": "http://localhost:3001/targets/create",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-02-05T14:32:58.694Z",
+    "modified": "2023-02-05T14:36:50.151Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"label\": \"target-a\",\n  \"meta_data\": {},\n  \"quota\": {\n    \"quota\": 30000,\n    \"period_type\": \"day\",\n    \"amount_of_periods\": 30,\n    \"start_date\": \"2023-02-05T14:36:35.276Z\"\n  }\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "7acdadeb-68f2-488b-8877-2c97c0464f12",
+    "colId": "cc958731-c089-4ed7-9e37-b6a5ad21f5ac",
+    "containerId": "",
+    "name": "get-target",
+    "url": "http://localhost:3001/targets/get?target_id=64021a6d-5ed8-4602-abbd-f36bec20231f",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2023-02-05T14:37:26.753Z",
+    "modified": "2023-02-05T14:37:44.946Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "target_id",
+        "value": "64021a6d-5ed8-4602-abbd-f36bec20231f",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "d4f2c5fe-acc5-4661-8f26-e60985128b90",
+    "colId": "cc958731-c089-4ed7-9e37-b6a5ad21f5ac",
+    "containerId": "",
+    "name": "update-target",
+    "url": "http://localhost:3001/targets/update",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2023-02-05T14:38:20.757Z",
+    "modified": "2023-02-05T14:39:32.615Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"target_id\": \"64021a6d-5ed8-4602-abbd-f36bec20231f\",\n  \"label\": \"updated_label\",\n  \"meta_data\": {\n    \"prop1\": 123\n  }\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "9bd85415-415d-47f7-9619-0ddb6ab2c5f2",
+    "colId": "cc958731-c089-4ed7-9e37-b6a5ad21f5ac",
+    "containerId": "",
+    "name": "update-quota",
+    "url": "http://localhost:3001/targets/update-quota",
+    "method": "POST",
+    "sortNum": 50000,
+    "created": "2023-02-05T14:39:59.077Z",
+    "modified": "2023-02-05T14:41:32.310Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"target_id\": \"64021a6d-5ed8-4602-abbd-f36bec20231f\",\n  \"quota\": {\n    \"quota\": 13333,\n    \"period_type\": \"day\",\n    \"amount_of_periods\": 2,\n    \"start_date\": \"2023-02-05T14:36:35.276Z\"\n  }\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "de878258-03b6-4ec7-b024-0891981f4631",
+    "colId": "cc958731-c089-4ed7-9e37-b6a5ad21f5ac",
+    "containerId": "",
+    "name": "delete target",
+    "url": "http://localhost:3001/targets/delete",
+    "method": "POST",
+    "sortNum": 60000,
+    "created": "2023-02-05T14:42:30.966Z",
+    "modified": "2023-02-05T14:42:51.135Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"target_id\": \"64021a6d-5ed8-4602-abbd-f36bec20231f\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]

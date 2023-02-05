@@ -15,6 +15,7 @@ import { limiterPlugin } from './services/limiter/api';
 import { createOutboxProcess } from './utils/outbox';
 import { pgboss } from './event-bus';
 import { createLimiterTasks } from './services/limiter/tasks';
+import { targetPlugin } from './services/targets/api';
 
 const ENVIRONMENT = process.env.NODE_ENV ?? 'development';
 const IS_PROD = ENVIRONMENT === 'production';
@@ -44,6 +45,13 @@ const app: FastifyPluginAsync = async (fastify) => {
   fastify.register(ingestPlugin, { prefix: '/ingest' });
   fastify.register(estimatorPlugin, { prefix: '/estimator' });
   fastify.register(limiterPlugin, { prefix: '/limiter' });
+
+  fastify.register(targetPlugin, {
+    prefix: '/targets',
+    contextFactory(req, reply) {
+      return {};
+    },
+  });
 
   fastify.get('/_health', (_, reply) => {
     return reply.status(200).send('ok');
