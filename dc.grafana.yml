@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  grafana:
+    image: grafana/grafana-oss:9.3.6
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards/usage
+    ports:
+      - 3033:3000/tcp
+    restart: on-failure
+    depends_on:
+      - postgres
+    networks:
+      - metric
