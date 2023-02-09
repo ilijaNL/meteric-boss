@@ -5,11 +5,13 @@ export type {
   InputContract,
   ContractImpl,
   ResolveFunction,
-  ContractType as ContractDef,
-  InferData,
+  InferInput,
+  InferOutput,
   ContractMethod,
   MethodType,
+  PickMutations,
+  PickQueries,
   RPC,
 } from './contract';
 
-export { toServer, createDocuments, createContract } from './contract';
+export { toServer, createContract, createDocument } from './contract';

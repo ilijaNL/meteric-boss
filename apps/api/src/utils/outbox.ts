@@ -1,20 +1,20 @@
-import db, { QueryCommand, execute, pool, query, tryToAcquireLock, withTransaction } from '@/db';
+import db, { pool, query, tryToAcquireLock, withTransaction } from '@/db';
 import { UsageEventStream } from '@/__generated__/db';
 import { Selectable, sql } from 'kysely';
-import { Pool, PoolClient } from 'pg';
+import { PoolClient } from 'pg';
 import { hashStringToInt } from './char';
 import { createBaseWorker } from './worker';
 
 const outboxHashKey = hashStringToInt('__outbox__');
 
 /**
- * Creates a worker which creates new tasks from the event_stream events in an outbox fashion
+ * Creates a worker which pools non processed events. The processed events are not in order
  *
- * it is important to keep process fn fast
+ * The execute fn is executed in transaction
  * @returns
  */
 export const createOutboxProcess = (
-  collect: (events: Selectable<UsageEventStream>[], poolClient: PoolClient) => Promise<QueryCommand[]>
+  execute: (events: Selectable<UsageEventStream>[], poolClient: PoolClient) => Promise<void>
 ) => {
   async function run() {
     await withTransaction(pool, async (client) => {
@@ -24,6 +24,8 @@ export const createOutboxProcess = (
         return;
       }
 
+      // this can become really large if many incoming events
+      // alternative is to do a select skip locked with limit
       const qBuilder = db
         .updateTable('usage.event_stream')
         .set({
@@ -39,9 +41,7 @@ export const createOutboxProcess = (
         return;
       }
 
-      const queries = await collect(events, client);
-
-      await execute(queries, client);
+      await execute(events, client);
     });
   }
 

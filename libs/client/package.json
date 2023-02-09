@@ -1,5 +1,5 @@
 {
-  "name": "@meteric-boss/api",
+  "name": "@meteric-boss/client",
   "version": "0.0.1",
   "description": "",
   "types": "src/index.ts",
@@ -12,6 +12,9 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "@meteric-boss/api": "*"
+  },
   "devDependencies": {
     "@sinclair/typebox": "^0.25.9",
     "@typed-doc/core": "*",

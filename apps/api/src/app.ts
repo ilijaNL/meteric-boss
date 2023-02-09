@@ -1,7 +1,3 @@
-require('dotenv-safe').config({
-  allowEmptyValues: true,
-});
-
 import { FastifyPluginAsync, FastifyServerOptions, RouteOptions } from 'fastify';
 import { migrate } from 'postgres-migrations';
 import fp from 'fastify-plugin';
@@ -42,15 +38,12 @@ const app: FastifyPluginAsync = async (fastify) => {
 
   await fastify.register(sensible);
 
-  fastify.register(ingestPlugin, { prefix: '/ingest' });
+  fastify.register(ingestPlugin);
   fastify.register(estimatorPlugin, { prefix: '/estimator' });
   fastify.register(limiterPlugin, { prefix: '/limiter' });
 
   fastify.register(targetPlugin, {
     prefix: '/targets',
-    contextFactory(req, reply) {
-      return {};
-    },
   });
 
   fastify.get('/_health', (_, reply) => {
@@ -65,7 +58,6 @@ const app: FastifyPluginAsync = async (fastify) => {
 
   const outboxWorker = createOutboxProcess(async (events, client) => {
     await createLimiterTasks(events, client);
-    return [];
   });
 
   await pgboss.start();

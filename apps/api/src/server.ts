@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import closeWithGrace from 'close-with-grace';
+import './env';
 import app, { options } from './app';
 
 const DEFAULT_PORT = 3001;

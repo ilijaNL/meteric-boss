@@ -15,7 +15,7 @@ export const TargetQuotaSchema = Type.Object({
 
 export const targetContract = createContract({
   get: {
-    type: 'query',
+    methodType: 'query',
     input: Type.Object({
       target_id: Uuid,
     }),
@@ -35,7 +35,7 @@ export const targetContract = createContract({
     }),
   },
   create: {
-    type: 'mutation',
+    methodType: 'mutation',
     input: Type.Object({
       label: Type.String({ minLength: 3 }),
       meta_data: Type.Record(Type.String(), Type.Any()),
@@ -44,7 +44,7 @@ export const targetContract = createContract({
     output: Result,
   },
   update: {
-    type: 'mutation',
+    methodType: 'mutation',
     input: Type.Object({
       target_id: Uuid,
       label: Type.String({ minLength: 3 }),
@@ -53,7 +53,7 @@ export const targetContract = createContract({
     output: Success,
   },
   'update-quota': {
-    type: 'mutation',
+    methodType: 'mutation',
     input: Type.Object({
       target_id: Uuid,
       quota: TargetQuotaSchema,
@@ -61,7 +61,7 @@ export const targetContract = createContract({
     output: Success,
   },
   delete: {
-    type: 'mutation',
+    methodType: 'mutation',
     input: Type.Object({
       target_id: Uuid,
     }),

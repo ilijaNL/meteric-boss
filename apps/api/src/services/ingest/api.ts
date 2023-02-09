@@ -1,5 +1,7 @@
+import { ingestContract } from '@meteric-boss/api';
 import db from '@/db';
 import inProcessBus from '@/event-bus';
+import { toPlugin } from '@/plugins/fastify-typed-doc';
 import createBatcher from '@/utils/batcher';
 import { Uuid } from '@/utils/schema';
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
@@ -44,19 +46,10 @@ const ingestBatcher = createBatcher<Static<typeof OperationReportSchema>>(
   { maxSize: 250, maxTimeInMs: 75 }
 );
 
-export const ingestPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
-  // prefetch all targets beforehand
-  await getAllTargets();
-
-  fastify.post(
-    '/',
-    {
-      schema: {
-        body: OperationReportSchema,
-      },
-    },
-    async (req, reply) => {
-      const operationReport = req.body;
+const plugin = toPlugin(ingestContract)({
+  ingest: {
+    resolve: async ({ input }) => {
+      const operationReport = input;
       // check if target exists
       const target = await getTarget(operationReport.t_id);
 
@@ -64,13 +57,25 @@ export const ingestPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
         throw new createHttpError.NotFound('target not found');
       }
 
-      await ingestBatcher.add(operationReport);
+      // dont block and just ingest and handle on background
+      /* await  */ ingestBatcher.add(operationReport);
 
       inProcessBus.emit('op_ingested', { target_id: target.id });
 
-      reply.send('ok');
-    }
-  );
+      return {
+        s: true,
+      };
+    },
+  },
+});
+
+export const ingestPlugin: FastifyPluginAsyncTypebox = async (fastify) => {
+  // prefetch all targets beforehand
+  await getAllTargets();
+
+  fastify.register(plugin, {
+    contextFactory: (_req, _reply) => null,
+  });
 
   fastify.addHook('onClose', () => ingestBatcher.flush());
 };

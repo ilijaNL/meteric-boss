@@ -10,17 +10,13 @@
   },
   "scripts": {
     "tc": "tsc --noEmit",
-    "dev": "ts-node-dev -r tsconfig-paths/register -- src/server.ts",
-    "dev:debug": "ts-node-dev -r tsconfig-paths/register --inspect  --respawn -- src/server.ts",
+    "dev": "tsx watch --clear-screen=false src/server.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "build:clean": "rimraf dist && npm run gen && npm run build",
     "build": "tsc --project ./tsconfig.build.json",
-    "start": "fastify start -l error -r ./bootstrap.js dist/app.js",
+    "start": "node -r ./bootstrap.js dist/server.js",
     "gen": "yarn gen:db",
-    "gen:db": "kysely-codegen --include-pattern \"(usage).*\" --url postgres://postgres:postgres@localhost:5432/app --out-file ./src/__generated__/db.d.ts",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test": "jest"
+    "gen:db": "kysely-codegen --include-pattern \"(usage).*\" --url postgres://postgres:postgres@localhost:5432/app --out-file ./src/__generated__/db.d.ts"
   },
   "license": "MIT",
   "dependencies": {
@@ -31,22 +27,19 @@
     "@fastify/rate-limit": "^7.4.0",
     "@fastify/sensible": "^5.1.1",
     "@fastify/type-provider-typebox": "^2.4.0",
-    "@graphql-typed-document-node/core": "^3.1.1",
+    "@meteric-boss/api": "*",
+    "@meteric-boss/client": "*",
     "@sinclair/typebox": "^0.25.9",
     "@sindresorhus/slugify": "^1.1.0",
     "@typed-doc/core": "*",
     "ajv": "^8.8.2",
     "ajv-formats": "^2.1.1",
-    "api-contracts": "*",
     "date-fns": "^2.25.0",
     "delay": "^5.0.0",
     "dotenv-safe": "^8.2.0",
-    "ejs": "^3.1.8",
-    "email-templates": "^10.0.1",
     "fast-json-stable-stringify": "^2.1.0",
     "fast-jwt": "^1.5.1",
     "fastify": "^4.5.3",
-    "fastify-cli": "^5.5.0",
     "graphql": "16.6.0",
     "graphql-scalars": "^1.13.6",
     "graphql-tag": "^2.12.6",
@@ -68,8 +61,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@types/ejs": "^3.1.1",
-    "@types/email-templates": "^10.0.1",
     "@types/http-errors": "^1.8.1",
     "@types/lodash": "^4.14.176",
     "@types/lru-cache": "^5.1.1",
@@ -83,6 +74,7 @@
     "ts-node": "^10.7.0",
     "ts-node-dev": "^2.0.0",
     "tsconfig": "*",
+    "tsx": "^3.12.3",
     "typescript": "^4.9.0"
   }
 }

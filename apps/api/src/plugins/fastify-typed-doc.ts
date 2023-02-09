@@ -32,8 +32,8 @@ export const toPlugin =
       });
 
       // registery mutations
-      (Object.entries(server) as [string, typeof server[keyof T]][])
-        .filter(([, spec]) => spec.type === 'mutation')
+      (Object.entries(server) as [string, (typeof server)[keyof T]][])
+        .filter(([, spec]) => spec.methodType === 'mutation')
         .forEach(([method, spec]) => {
           fastify.post(
             normalizeRoute(method),
@@ -46,8 +46,8 @@ export const toPlugin =
         });
 
       // registery queries
-      (Object.entries(server) as [string, typeof server[keyof T]][])
-        .filter(([, spec]) => spec.type === 'query')
+      (Object.entries(server) as [string, (typeof server)[keyof T]][])
+        .filter(([, spec]) => spec.methodType === 'query')
         .forEach(([method, spec]) => {
           fastify.get(
             normalizeRoute(method),

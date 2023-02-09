@@ -48,7 +48,8 @@ function createBatcher<T>(flushBatch: (batch: Array<Item<T>>) => Promise<any>, c
       delayPromise = delay(config.maxTimeInMs);
       waitPromise = Promise.resolve()
         .then(() => delayPromise)
-        .then(() => flush());
+        .then(() => flush())
+        .catch((err) => {});
     }
 
     await waitPromise;

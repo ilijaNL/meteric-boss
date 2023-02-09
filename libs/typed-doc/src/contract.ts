@@ -1,11 +1,15 @@
-import { Static, TSchema, TObject } from '@sinclair/typebox';
+import { Static, TObject } from '@sinclair/typebox';
 
 // Contract stuff
 export type MethodType = 'query' | 'mutation';
 
-export interface RPC<Type extends MethodType, Input extends TObject, Output extends TObject> {
-  type: Type;
-  input?: Input;
+export interface RPC<
+  Type,
+  Input extends TObject = TObject,
+  Output extends TObject = TObject
+> {
+  methodType: Type;
+  input: Input;
   output: Output;
 }
 
@@ -13,35 +17,34 @@ export interface InputContract {
   [method: string]: RPC<MethodType, TObject, TObject>;
 }
 
-export interface ContractType<Type extends MethodType = MethodType, Input = any, Output = any> {
-  input: Input;
-  output: Output;
-  type: Type;
-}
-
-export type InferData<T extends ContractMethod> = T['__inferedData'];
-
-export type ContractMethod<
-  Method = string,
-  T extends RPC<any, TObject, TObject> = RPC<MethodType, TObject, TObject>,
-  TInput = T['input']
-> = {
+export type ContractMethod<Method = string, T extends RPC<MethodType> = RPC<MethodType>> = {
   method: Method;
-  __inferedData: ContractType<T['type'], TInput extends TSchema ? Static<TInput> : undefined, Static<T['output']>>;
 } & T;
 
 export type Contract<T extends InputContract = InputContract> = {
-  [P in keyof T]: ContractMethod<P, T[P]> & T[P];
+  [P in keyof T]: ContractMethod<P, T[P]>;
 };
 
+export type PickByValue<T, ValueType> = Pick<
+  T,
+  { [Key in keyof T]-?: T[Key] extends ValueType ? Key : never }[keyof T]
+>;
+
+
+export type PickQueries<T extends Contract> = PickByValue<T, { methodType: 'query' }>;
+export type PickMutations<T extends Contract> = PickByValue<T, { methodType: 'mutation' }>;
+
+export type InferInput<T extends ContractMethod> = Static<T['input']>;
+export type InferOutput<T extends ContractMethod> = Static<T['output']>;
+
 interface ServerProcedure<TContext, Extensions, T extends ContractMethod> {
-  resolve: ResolveFunction<TContext, InferData<T>['input'], InferData<T>['output']>;
+  resolve: ResolveFunction<TContext, InferInput<T>, InferOutput<T>>;
   extensions: Extensions;
 }
 
 interface ContractImplProcedure<TContext, T extends ContractMethod, Extensions = any> {
   extensions?: Extensions;
-  resolve: ResolveFunction<TContext, InferData<T>['input'], InferData<T>['output']>;
+  resolve: ResolveFunction<TContext, InferInput<T>, InferOutput<T>>;
 }
 
 export type ContractImpl<TContext, Extensions, TC extends Contract> = {
@@ -57,16 +60,16 @@ export interface ResolveFunction<Context = any, Input = any, Output = any> {
 }
 
 // client
-export type TypedDocument<Result, Input, Method = string, Type extends MethodType = MethodType> = {
+export type TypedDocument<Method extends string, Type extends MethodType, Input, Output> = {
   method: Method;
-  input?: Input;
-  type: Type;
+  methodType: Type;
+  input: Input;
   /**
    * This type is used to ensure that the variables you pass in to the query are assignable to Variables
    * and that the Result is assignable to whatever you pass your result to. The method is never actually
    * implemented, but the type is valid because we list it as optional
    */
-  __apiType?: (variables: Input) => Result;
+  __apiType?: (variables: Input) => Output;
 };
 
 export function createContract<T extends InputContract>(specification: T): Contract<T> {
@@ -97,23 +100,11 @@ export function toServer<T extends Contract>(contract: T) {
   };
 }
 
-export function createDocuments<TContract extends Contract<InputContract>>() {
-  function factory<T extends keyof TContract, TData extends ContractType = InferData<TContract[T]>>(
-    method: T,
-    payload: undefined extends TData['input']
-      ? {
-          type: TData['type'];
-        }
-      : {
-          type: TData['type'];
-          input: TData['input'];
-        }
-  ): TypedDocument<TData['output'], TData['input'], T, TData['type']> {
-    return {
-      ...payload,
-      method: method,
-    };
-  }
-
-  return factory;
+export function createDocument<T extends ContractMethod>(contract: T, input: InferInput<T>) {
+  const doc: TypedDocument<T['method'], T['methodType'], InferInput<T>, InferOutput<T>> = {
+    methodType: contract.methodType,
+    method: contract.method,
+    input: input,
+  };
+  return doc;
 }

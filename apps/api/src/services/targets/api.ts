@@ -1,12 +1,15 @@
 import db, { execute, QueryCommand } from '@/db';
 import { toPlugin } from '@/plugins/fastify-typed-doc';
+import { metericClient } from '@/utils/client';
 import { UsageQuotas } from '@/__generated__/db';
-import { PeriodType, targetContract } from 'api-contracts';
+import { PeriodType, targetContract } from '@meteric-boss/api';
+import { FastifyPluginAsync, FastifyPluginCallback } from 'fastify';
 import createHttpError from 'http-errors';
 import { Selectable, sql } from 'kysely';
 import { v4 } from 'uuid';
+import fp from 'fastify-plugin';
 
-export const targetPlugin = toPlugin(targetContract)<{}>({
+const _targetPlugin = toPlugin(targetContract)<{}>({
   get: {
     resolve: async ({ input: { target_id } }) => {
       const target = await db
@@ -126,3 +129,40 @@ export const targetPlugin = toPlugin(targetContract)<{}>({
     },
   },
 });
+
+const _metericPlugin: FastifyPluginCallback<{ target_id: string }> = async (fastify, opts, done) => {
+  fastify.decorateRequest('__metericboss', null);
+
+  fastify.addHook('onRequest', async function onRequest(request) {
+    (request as any).__metericboss = {
+      startTime: Date.now(),
+    };
+  });
+
+  fastify.addHook('onSend', async (request, reply) => {
+    const meteric = (request as any).__metericboss;
+
+    await metericClient.i.mutate.ingest({
+      op: request.routerPath,
+      d: Date.now() - meteric.startTime,
+      s: reply.statusCode,
+      w: 3,
+      m_d: {},
+      t_id: opts.target_id,
+    });
+  });
+
+  done();
+};
+
+const metericPlugin = fp(_metericPlugin);
+
+export const targetPlugin: FastifyPluginAsync = async (fastify) => {
+  fastify.register(metericPlugin, {
+    target_id: 'd040b0ce-c58d-4f31-9924-0adacbc0fc66',
+  });
+
+  fastify.register(_targetPlugin, {
+    contextFactory: () => ({}),
+  });
+};
