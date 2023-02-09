@@ -2,7 +2,7 @@
   "name": "@typed-doc/core",
   "version": "1.0.0",
   "description": "",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

@@ -33,8 +33,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "hasura-cli": "~2.15.1",
     "prettier": "^2.7.1",
-    "turbo": "^1.4.3"
+    "turbo": "^1.7.4"
   }
 }

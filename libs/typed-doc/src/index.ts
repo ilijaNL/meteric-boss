@@ -15,3 +15,4 @@ export type {
 } from './contract';
 
 export { toServer, createContract, createDocument } from './contract';
+export { createRPCClient, FetchFn } from './client';

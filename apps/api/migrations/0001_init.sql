@@ -53,7 +53,7 @@ WITH NO DATA;
 
 SELECT add_continuous_aggregate_policy('usage.ops_weight_10_minutes',
   start_offset => INTERVAL '12 hours',
-  end_offset => INTERVAL '10 min',
+  end_offset => INTERVAL '1 min',
   schedule_interval => INTERVAL '10 min'
 );
 
