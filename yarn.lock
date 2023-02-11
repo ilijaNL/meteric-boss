@@ -287,6 +287,22 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
+"@typed-doc/core@0.0.4", "@typed-doc/core@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@typed-doc/core/-/core-0.0.4.tgz#ffdec22762ca58e62a1ffb4d6bfb32951df86900"
+  integrity sha512-ESHft9fqJT8G1/TE6Z5vaAz3amjICVjt9jBfe847Qle7F601oI3y8McjmzJF+uQN3PVtOMLPo6Aj4/EEOFFK9A==
+  dependencies:
+    "@sinclair/typebox" "^0.25.9"
+
+"@typed-doc/fastify@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@typed-doc/fastify/-/fastify-0.0.3.tgz#e69db55b6d3d375e58168deaa1d5a4b93d389dfc"
+  integrity sha512-BBLuSp+uWsvGPbaTRXuG6bxX1dxRpeAQ0r1DLMXJRkFfAE7Uq2sRX+IR4nJqJoweqUe/RNE/CZrm+9tnkv5Iiw==
+  dependencies:
+    "@sinclair/typebox" "^0.25.9"
+    "@typed-doc/core" "0.0.4"
+    "@types/node" "*"
+
 "@types/http-errors@^1.8.1":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@types/http-errors/-/http-errors-1.8.2.tgz#7315b4c4c54f82d13fa61c228ec5c2ea5cc9e0e1"

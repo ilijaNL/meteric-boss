@@ -1,9 +1,11 @@
 import { ingestContract, targetContract } from '@meteric-boss/api';
-import { createRPCClient, FetchFn } from '@typed-doc/core';
+import { createRPCClient, FetchFn, RPCClient } from '@typed-doc/core';
 
 export type { FetchFn };
 
-export const createClient = (fetchFn: FetchFn) => ({
+export type Client = { i: RPCClient<typeof ingestContract>; target: RPCClient<typeof targetContract> };
+
+export const createClient = (fetchFn: FetchFn): Client => ({
   i: createRPCClient(ingestContract, fetchFn, '/'),
   target: createRPCClient(targetContract, fetchFn, '/targets'),
 });

@@ -1,5 +1,3 @@
-const dontenv = require('dotenv-safe');
-
-dontenv.config({
+require('dotenv-safe').config({
   allowEmptyValues: true,
 });

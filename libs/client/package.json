@@ -13,15 +13,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@typed-doc/core": "^0.0.4",
+    "@sinclair/typebox": "^0.25.9"
+  },
+  "peerDependencies": {
     "@meteric-boss/api": "*"
   },
   "devDependencies": {
-    "@sinclair/typebox": "^0.25.9",
-    "@typed-doc/core": "*",
+    "@meteric-boss/api": "*",
     "typescript": "^4.9.0"
-  },
-  "peerDependencies": {
-    "@sinclair/typebox": "^0.25.9",
-    "@typed-doc/core": "*"
   }
 }

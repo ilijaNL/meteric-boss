@@ -12,13 +12,11 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "devDependencies": {
-    "@sinclair/typebox": "^0.25.9",
-    "@typed-doc/core": "*",
-    "typescript": "^4.9.0"
+  "dependencies": {
+    "@typed-doc/core": "^0.0.4",
+    "@sinclair/typebox": "^0.25.9"
   },
-  "peerDependencies": {
-    "@sinclair/typebox": "^0.25.9",
-    "@typed-doc/core": "*"
+  "devDependencies": {
+    "typescript": "^4.9.0"
   }
 }
